@@ -5,6 +5,8 @@ import showAPoint from "@/components/ch02/showAPoint.vue"
 import showAPointbtvar from "@/components/ch02/showAPointByVar.vue"
 import clickedPoints from "@/components/ch02/clickedPoints.vue"
 import multiPoints from "@/components/ch03/multiPoints.vue"
+import triangelematrix from "@/components/ch04/triangelematrix.vue"
+import rotateAnimation from "@/components/ch04/rotateAnimation.vue"
 Vue.use(Router)
 
 export default new Router({
@@ -30,6 +32,14 @@ export default new Router({
       path: "/ch03/multiPoints",
       name: "multiPoints",
       component: multiPoints
+    }, {
+      path: "/ch04/triangelematrix",
+      name: "triangelematrix",
+      component: triangelematrix
+    }, {
+      path: "/ch04/rotateAnimation",
+      name: "rotateAnimation",
+      component: rotateAnimation
     }
 
   ]

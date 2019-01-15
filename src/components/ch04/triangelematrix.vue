@@ -8,9 +8,10 @@
 </template>
 
 <script>
-import vShaderSource from "@/shaders/vshowAPointByVar.glsl";
-import fShaderSource from "@/shaders/fshowAPointByVar.glsl";
+import vShaderSource from "@/shaders/vtriangleMatrix.glsl";
+import fShaderSource from "@/shaders/ftriangleMatrix.glsl";
 import { initShaders } from "@/libs/myWebglUtils.js";
+import Matrix4 from "@/libs/cuon-matrix.js";
 
 export default {
   data() {
@@ -23,6 +24,16 @@ export default {
   },
   computed: {},
   methods: {
+    //矩阵变化：旋转angle度
+    rotateMatrix(gl, angle) {
+      let matrix = new Matrix4();
+      let rotateMatrix = matrix.setRotate(angle, 0.0, 0.0, 1.0);
+      let rotatemat4 = gl.getUniformLocation(gl.program, "rotatemat4");
+      if (rotatemat4 < 0) {
+        alert("获取rotatemat4位置属性失败");
+      }
+      gl.uniformMatrix4fv(rotatemat4, false, rotateMatrix.elements);
+    },
     initVertexBuffers(gl, array, index) {
       let verties = new Float32Array(array);
       var num = array.length / 2;
@@ -63,6 +74,8 @@ export default {
         console.log("rect: ", rect);
       };
 
+      //旋转一定的角度
+      this.rotateMatrix(gl, 40);
       //从webgl系统程序对象里面获取position存储的位置
       let a_position = gl.getAttribLocation(gl.program, "position");
       if (a_position < 0) {
@@ -72,11 +85,10 @@ export default {
       let num = this.initVertexBuffers(
         gl,
         [0.5, 0.5, 0.5, 0.3, -0.5, 0.6],
-        a_position
+        a_position,
+        90
       );
 
-      //将顶点位置传给attribute对象
-      // gl.vertexAttrib3f(a_position, 0.0, 0.0, 0.0, 1.0);
       //从webgl系统程序对象里面获取pointSize存储的位置
       let a_pointSize = gl.getAttribLocation(gl.program, "pointSize");
       if (a_pointSize < 0) {
@@ -91,8 +103,7 @@ export default {
       }
       //将颜色设置传给sttribute对象
       gl.uniform4f(a_fragColor, 0.0, 1.0, 0.0, 1.0);
-
-      gl.drawArrays(gl.POINTS, 0, num);
+      gl.drawArrays(gl.TRIANGLES, 0, num);
     }
   },
   destroyed() {}
