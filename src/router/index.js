@@ -7,6 +7,7 @@ import clickedPoints from "@/components/ch02/clickedPoints.vue"
 import multiPoints from "@/components/ch03/multiPoints.vue"
 import triangelematrix from "@/components/ch04/triangelematrix.vue"
 import rotateAnimation from "@/components/ch04/rotateAnimation.vue"
+import fmultiAttributeinterleaved from "@/components/ch05/multiAttributeinterleaved.vue"
 Vue.use(Router)
 
 export default new Router({
@@ -40,6 +41,10 @@ export default new Router({
       path: "/ch04/rotateAnimation",
       name: "rotateAnimation",
       component: rotateAnimation
+    }, {
+      path: "/ch05/fmultiAttributeinterleaved",
+      name: "fmultiAttributeinterleaved",
+      component: fmultiAttributeinterleaved
     }
 
   ]

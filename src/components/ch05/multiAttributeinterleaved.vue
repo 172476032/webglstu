@@ -1,5 +1,6 @@
 <template>
-  <div class="swapper">
+  <div class="swapper"
+       style="border:1px solid red">
     <canvas id="webgl"
             width="400px"
             height="400px"></canvas>
@@ -7,17 +8,13 @@
 </template>
 
 <script>
-import vShaderSource from "@/shaders/vRotateAnimation.glsl";
-import fShaderSource from "@/shaders/fRotateAnimation.glsl";
+import vShaderSource from "@/shaders/vmultiAttributeinterleaved.glsl";
+import fShaderSource from "@/shaders/fmultiAttributeinterleaved.glsl";
 import { initShaders } from "@/libs/myWebglUtils.js";
-import Matrix4 from "@/libs/cuon-matrix.js";
 
 export default {
   data() {
-    return {
-      ctgl: null,
-      angle: 0
-    };
+    return {};
   },
   components: {},
   mounted() {
@@ -26,16 +23,6 @@ export default {
   },
   computed: {},
   methods: {
-    //矩阵变化：旋转angle度
-    rotateMatrix(gl, angle) {
-      let matrix = new Matrix4();
-      let rotateMatrix = matrix.setRotate(angle, 0.0, 0.0, 1.0);
-      let rotatemat4 = gl.getUniformLocation(gl.program, "rotatemat4");
-      if (rotatemat4 < 0) {
-        alert("获取rotatemat4位置属性失败");
-      }
-      gl.uniformMatrix4fv(rotatemat4, false, rotateMatrix.elements);
-    },
     initVertexBuffers(gl, array, index) {
       let verties = new Float32Array(array);
       var num = array.length / 2;
@@ -58,7 +45,6 @@ export default {
     loadPoint() {
       let canvas = document.getElementById("webgl");
       let gl = canvas.getContext("webgl");
-      this.ctgl = gl;
       if (!gl) {
         alert("获取浏览器webgl上下文失败");
       }
@@ -66,26 +52,17 @@ export default {
       if (!initShaders(gl, vShaderSource, fShaderSource)) {
         alert("着色器初始化失败");
       }
+      //指定删除颜色
+      gl.clearColor(0.0, 0.0, 0.0, 1.0);
+      //清除颜色缓冲区，设置背景色
+      gl.clear(gl.COLOR_BUFFER_BIT);
       //注册点击事件
       canvas.onclick = evt => {
         console.log("evt: ", evt);
         let rect = evt.target.getBoundingClientRect();
         console.log("rect: ", rect);
       };
-      this.tick();
-    },
-    tick(timestrap) {
-      console.log(timestrap);
-      this.draw(this.ctgl);
-      window.requestAnimationFrame(this.tick);
-    },
-    draw(gl, angle) {
-      //指定删除颜色
-      gl.clearColor(0.0, 0.0, 0.0, 1.0);
-      //清除颜色缓冲区，设置背景色
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      //旋转一定的角度
-      this.rotateMatrix(gl, this.angle);
+
       //从webgl系统程序对象里面获取position存储的位置
       let a_position = gl.getAttribLocation(gl.program, "position");
       if (a_position < 0) {
@@ -95,9 +72,11 @@ export default {
       let num = this.initVertexBuffers(
         gl,
         [0.5, 0.5, 0.5, 0.3, -0.5, 0.6],
-        a_position,
-        this.angle
+        a_position
       );
+
+      //将顶点位置传给attribute对象
+      // gl.vertexAttrib3f(a_position, 0.0, 0.0, 0.0, 1.0);
       //从webgl系统程序对象里面获取pointSize存储的位置
       let a_pointSize = gl.getAttribLocation(gl.program, "pointSize");
       if (a_pointSize < 0) {
@@ -112,9 +91,8 @@ export default {
       }
       //将颜色设置传给sttribute对象
       gl.uniform4f(a_fragColor, 0.0, 1.0, 0.0, 1.0);
-      gl.drawArrays(gl.TRIANGLES, 0, num);
-      //每帧旋转5度
-      this.angle += 5;
+
+      gl.drawArrays(gl.POINTS, 0, num);
     }
   },
   destroyed() {}
