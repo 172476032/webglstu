@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import vShaderSource from "@/shaders/vmultiAttributeinterleaved.glsl";
-import fShaderSource from "@/shaders/fmultiAttributeinterleaved.glsl";
+import vShaderSource from "@/shaders/vmultiAttributeinterleavedColor.glsl";
+import fShaderSource from "@/shaders/fmultiAttributeinterleavedColor.glsl";
 import { initShaders } from "@/libs/myWebglUtils.js";
 
 export default {
@@ -23,10 +23,10 @@ export default {
   },
   computed: {},
   methods: {
-    initVertexBuffers(gl, array, a_position,a_pointSize) {
+    initVertexBuffers(gl, array, a_position,a_pointSize,a_color) {
       let verties = new Float32Array(array);
       let fsize = verties.BYTES_PER_ELEMENT;
-      var num = array.length / 3;
+      var num = array.length / 6;
       //创建缓冲区对象
       let vertexBuffer = gl.createBuffer();
       if (!vertexBuffer) {
@@ -38,13 +38,17 @@ export default {
       //向缓冲区对象写入数据
       gl.bufferData(gl.ARRAY_BUFFER, verties, gl.STATIC_DRAW);
       //缓冲区对象分配给webgl系统的程序对象内的变量
-      gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, fsize*3, 0);
+      gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, fsize*6, 0);
       //连接index变量与分配给他的缓冲区对象
       gl.enableVertexAttribArray(a_position);    
       //将顶点大小传给sttribute对象
-      gl.vertexAttribPointer(a_pointSize, 1, gl.FLOAT, false, fsize*3, fsize*2);
+      gl.vertexAttribPointer(a_pointSize, 1, gl.FLOAT, false, fsize*6, fsize*2);
        //连接index变量与分配给他的缓冲区对象
       gl.enableVertexAttribArray(a_pointSize);
+         //将顶点大小传给sttribute对象
+      gl.vertexAttribPointer(a_color, 3, gl.FLOAT, false, fsize*6, fsize*3);
+       //连接index变量与分配给他的缓冲区对象
+      gl.enableVertexAttribArray(a_color);
       return num;
     },
     loadPoint() {
@@ -72,18 +76,29 @@ export default {
       let a_position = gl.getAttribLocation(gl.program, "position");
       if (a_position < 0) {
         alert("获取a_position位置属性失败");
-      }//从webgl系统程序对象里面获取position存储的位置
+      }
+      //从webgl系统程序对象里面获取position存储的位置
       let a_pointSize = gl.getAttribLocation(gl.program, "pointSize");
       if (a_pointSize < 0) {
         alert("获取a_pointSize位置属性失败");
       }
+      //从webgl系统程序对象里面获取position存储的位置
+      let a_color = gl.getAttribLocation(gl.program, "a_color");
+      if (a_color < 0) {
+        alert("获取a_color位置属性失败");
+      }
       //初始化顶点缓冲区
       let num = this.initVertexBuffers(
         gl,
-        [0.5, 0.5, 10.0,0.5, 0.3,20.0, -0.5, 0.6,30.0],
+        [0.5, 0.5, 10.0,1.0,0.0,0.0,0.5, 0.3,20.0,0.0,1.0,0.0, -0.5, 0.6,30.0,0.0,0.0,1.0],
         a_position,
-        a_pointSize
-      );    
+        a_pointSize,
+        a_color
+      );
+
+      //将顶点位置传给attribute对象
+      // gl.vertexAttrib3f(a_position, 0.0, 0.0, 0.0, 1.0);
+    
       //从webgl系统程序对象里面获取fragcolor存储的位置
       let a_fragColor = gl.getUniformLocation(gl.program, "color"); //此方法无任何属性和方法
       if (a_fragColor < 0) {
@@ -92,7 +107,7 @@ export default {
       //将颜色设置传给sttribute对象
       gl.uniform4f(a_fragColor, 0.0, 1.0, 0.0, 1.0);
 
-      gl.drawArrays(gl.POINTS, 0, num);
+      gl.drawArrays(gl.TRIANGLES, 0, num);
     }
   },
   destroyed() {}

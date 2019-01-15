@@ -7,7 +7,9 @@ import clickedPoints from "@/components/ch02/clickedPoints.vue"
 import multiPoints from "@/components/ch03/multiPoints.vue"
 import triangelematrix from "@/components/ch04/triangelematrix.vue"
 import rotateAnimation from "@/components/ch04/rotateAnimation.vue"
-import fmultiAttributeinterleaved from "@/components/ch05/multiAttributeinterleaved.vue"
+import multiAttributeinterleaved from "@/components/ch05/multiAttributeinterleaved.vue"
+import  multiAttributeinterleavedColor from "@/components/ch05/multiAttributeinterleavedColor.vue"
+import multiAttributeinterleavedColoredTriangles from "@/components/ch05/multiAttributeinterleavedColoredTriangles.vue"
 Vue.use(Router)
 
 export default new Router({
@@ -42,9 +44,17 @@ export default new Router({
       name: "rotateAnimation",
       component: rotateAnimation
     }, {
-      path: "/ch05/fmultiAttributeinterleaved",
-      name: "fmultiAttributeinterleaved",
-      component: fmultiAttributeinterleaved
+      path: "/ch05/multiAttributeinterleaved",
+      name: "multiAttributeinterleaved",
+      component: multiAttributeinterleaved
+    } ,{
+      path: "/ch05/multiAttributeinterleavedColor",
+      name: "multiAttributeinterleavedColor",
+      component: multiAttributeinterleavedColor
+    },{
+      path: "/ch05/multiAttributeinterleavedColoredTriangles",
+      name: "multiAttributeinterleavedColoredTriangles",
+      component: multiAttributeinterleavedColoredTriangles
     }
 
   ]
