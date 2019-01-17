@@ -14,7 +14,7 @@ import fragCoordTriangles from "@/components/webglProgrammingGuide/ch05/fragCoor
 import textureQuad from "@/components/webglProgrammingGuide/ch05/textureQuad.vue"
 import textureQuadRepeat from "@/components/webglProgrammingGuide/ch05/textureQuadRepeat.vue"
 import lookAtTriangles from "@/components/webglProgrammingGuide/ch07/lookAtTriangles.vue"
-
+import loadGltf from "@/components/treeJS/loadGltf.vue"
 
 //THREE.JS
 import rotateCube from "@/components/treeJS/rotateCube.vue"
@@ -34,6 +34,11 @@ export default new Router({
       path: "/threejs/rotateCube",
       name: "rotateCube",
       component: rotateCube
+    },
+    {
+      path: "/threejs/loadGltf",
+      name: "loadGltf",
+      component: loadGltf
     },
 
     //webgl编程指南

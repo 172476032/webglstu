@@ -68,6 +68,7 @@
     "sinon": "^4.0.0",
     "sinon-chai": "^2.8.0",
     "three": "^0.100.0",
+    "three-gltf-loader": "^1.100.0",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
     "vue-loader": "^13.3.0",

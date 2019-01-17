@@ -6,6 +6,7 @@
 
 <script>
 import * as THREE from "three";
+
 export default {
   data() {
     return {
@@ -24,9 +25,9 @@ export default {
   methods: {
     main() {
       this.initThree();
-      // this.addCube();
+      this.addCube();
       this.addLine();
-      // this.animate();
+      this.animate();
     },
     initThree() {
       this.scene = new THREE.Scene();
@@ -63,7 +64,6 @@ export default {
       let material = new THREE.LineBasicMaterial({ color: 0x0000ff });
       let line = new THREE.Line(geometry, material);
       this.scene.add(line);
-      this.render.render(this.scene, this.camera);
     }
   },
   destroyed() {}
